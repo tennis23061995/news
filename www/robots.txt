@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /admin/*
+Disallow: /preview/*
+Sitemap: http://tintech.vn/sitemaps.xml
