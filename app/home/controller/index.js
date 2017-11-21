@@ -383,7 +383,7 @@ var _class = function (_Base) {
               aurl = _context4.sent;
               ct = aurl.substring(0, 4) + "-" + aurl.substring(4, 6) + "-" + aurl.substring(6, 8);
               _context4.next = 6;
-              return this.model("article").where({ createtime: ['like', '%' + ct + '%'] }).order('lastmodified DESC').select();
+              return this.model("article").where({ createtime: ['like', '%' + ct + '%'], ispublished: 1 }).order('lastmodified DESC').select();
 
             case 6:
               items = _context4.sent;
@@ -753,33 +753,31 @@ var _class = function (_Base) {
 
   _class.prototype.menuAction = function () {
     var _ref12 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee8() {
-      var b, pagenumber, pagesize, aurl, itemId, urlrewrite, category, lstcategory, categories, i, content, rejectarticles, topList, rejectnews, newsList, _topList3, _newsList2, newsList1, _topList4, parentids, items, itemList, result, Page, page, pageData, cate, ca;
+      var pagenumber, pagesize, aurl, arrU, itemId, urlrewrite, category, lstcategory, categories, i, content, rejectarticles, topList, rejectnews, newsList, _topList3, _newsList2, newsList1, _topList4, parentids, items, itemList, result, Page, page, pageData, cate, ca;
 
       return _regenerator2.default.wrap(function _callee8$(_context8) {
         while (1) {
           switch (_context8.prev = _context8.next) {
             case 0:
-              b = this.get("page");
-
-              console.log(b);
               pagenumber = this.get("page") || 1;
               pagesize = this.get("pagesize") || 10;
-              _context8.next = 6;
+              _context8.next = 4;
               return this.get("curl");
 
-            case 6:
+            case 4:
               aurl = _context8.sent;
-              itemId = aurl.split('-')[aurl.split('-').length - 1];
-              urlrewrite = aurl.replace("-" + itemId, "");
-              _context8.next = 11;
+              arrU = aurl.split('-');
+              itemId = arrU.splice(-1, 1);
+              urlrewrite = arrU.join("-");
+              _context8.next = 10;
               return this.model("home").findOne("item", { urlrewrite: urlrewrite, id: itemId });
 
-            case 11:
+            case 10:
               category = _context8.sent;
-              _context8.next = 14;
+              _context8.next = 13;
               return this.model("home").findAll("item", { parentid: itemId });
 
-            case 14:
+            case 13:
               lstcategory = _context8.sent;
               categories = [category.id];
 
@@ -791,23 +789,23 @@ var _class = function (_Base) {
               rejectarticles = [0];
 
               if (!category.itemname) {
-                _context8.next = 103;
+                _context8.next = 102;
                 break;
               }
 
               if (!(category.style == 1)) {
-                _context8.next = 39;
+                _context8.next = 38;
                 break;
               }
 
-              _context8.next = 24;
+              _context8.next = 23;
               return this.model("article").where({ item: ["IN", categories] }).order("flag_a DESC,totop DESC,torecom DESC,topicrecom DESC,createtime DESC").limit(2).select();
 
-            case 24:
+            case 23:
               topList = _context8.sent;
 
               if (think.isEmpty(topList)) {
-                _context8.next = 37;
+                _context8.next = 36;
                 break;
               }
 
@@ -818,10 +816,10 @@ var _class = function (_Base) {
                 rejectnews.push(topList[i].id);
               }
 
-              _context8.next = 30;
+              _context8.next = 29;
               return this.model("article").where({ item: ["IN", categories], id: ["NOTIN", rejectnews] }).order("flag_a DESC,totop DESC,torecom DESC,topicrecom DESC,createtime DESC").limit(6).select();
 
-            case 30:
+            case 29:
               newsList = _context8.sent;
 
               for (i = 0; i < newsList.length; i++) {
@@ -829,30 +827,30 @@ var _class = function (_Base) {
               }
               this.assign("topList", topList);
               this.assign("newsList", newsList);
-              _context8.next = 36;
+              _context8.next = 35;
               return this.fetch("home/index/style1");
 
-            case 36:
+            case 35:
               content = _context8.sent;
 
-            case 37:
-              _context8.next = 72;
+            case 36:
+              _context8.next = 71;
               break;
 
-            case 39:
+            case 38:
               if (!(category.style == 2)) {
-                _context8.next = 62;
+                _context8.next = 61;
                 break;
               }
 
-              _context8.next = 42;
+              _context8.next = 41;
               return this.model("article").where({ item: ["IN", categories] }).order("flag_a DESC,totop DESC,torecom DESC,topicrecom DESC,createtime DESC").limit(2).select();
 
-            case 42:
+            case 41:
               _topList3 = _context8.sent;
 
               if (think.isEmpty(_topList3)) {
-                _context8.next = 60;
+                _context8.next = 59;
                 break;
               }
 
@@ -863,10 +861,10 @@ var _class = function (_Base) {
                 rejectnews.push(_topList3[i].id);
               }
 
-              _context8.next = 48;
+              _context8.next = 47;
               return this.model("article").where({ item: ["IN", categories], id: ["NOTIN", rejectnews] }).order("flag_a DESC,totop DESC,torecom DESC,topicrecom DESC,createtime DESC").limit(3).select();
 
-            case 48:
+            case 47:
               _newsList2 = _context8.sent;
 
 
@@ -874,10 +872,10 @@ var _class = function (_Base) {
                 rejectarticles.push(_newsList2[i].id);
                 rejectnews.push(_newsList2[i].id);
               }
-              _context8.next = 52;
+              _context8.next = 51;
               return this.model("article").where({ item: ["IN", categories], id: ["NOTIN", rejectnews] }).order("flag_a DESC,totop DESC,torecom DESC,topicrecom DESC,createtime DESC").limit(3).select();
 
-            case 52:
+            case 51:
               newsList1 = _context8.sent;
 
               for (i = 0; i < newsList1.length; i++) {
@@ -886,30 +884,30 @@ var _class = function (_Base) {
               this.assign("topList", _topList3);
               this.assign("newsList", _newsList2);
               this.assign("newsList1", newsList1);
-              _context8.next = 59;
+              _context8.next = 58;
               return this.fetch("home/index/style2");
 
-            case 59:
+            case 58:
               content = _context8.sent;
 
-            case 60:
-              _context8.next = 72;
+            case 59:
+              _context8.next = 71;
               break;
 
-            case 62:
+            case 61:
               if (!(category.style == 3)) {
-                _context8.next = 72;
+                _context8.next = 71;
                 break;
               }
 
-              _context8.next = 65;
+              _context8.next = 64;
               return this.model("article").where({ item: ["IN", categories] }).order("flag_a DESC,totop DESC,torecom DESC,topicrecom DESC,createtime DESC").limit(6).select();
 
-            case 65:
+            case 64:
               _topList4 = _context8.sent;
 
               if (think.isEmpty(_topList4)) {
-                _context8.next = 72;
+                _context8.next = 71;
                 break;
               }
 
@@ -917,24 +915,24 @@ var _class = function (_Base) {
                 rejectarticles.push(_topList4[i].id);
               }
               this.assign("topList", _topList4);
-              _context8.next = 71;
+              _context8.next = 70;
               return this.fetch("home/index/style3");
 
-            case 71:
+            case 70:
               content = _context8.sent;
 
-            case 72:
+            case 71:
               parentids = [category.id];
 
               if (!(category.parentid == 0)) {
-                _context8.next = 78;
+                _context8.next = 77;
                 break;
               }
 
-              _context8.next = 76;
+              _context8.next = 75;
               return this.model("home").findAll("item", { parentid: category.id });
 
-            case 76:
+            case 75:
               items = _context8.sent;
 
               if (items.length > 0) {
@@ -943,21 +941,21 @@ var _class = function (_Base) {
                 }
               }
 
-            case 78:
+            case 77:
               console.log("reject:" + rejectarticles);
-              _context8.next = 81;
+              _context8.next = 80;
               return this.model("home").getPageSelect({ item: ["IN", parentids], id: ["NOTIN", rejectarticles], ispublished: 1 }, pagenumber, pagesize);
 
-            case 81:
+            case 80:
               itemList = _context8.sent;
-              _context8.next = 84;
+              _context8.next = 83;
               return this.model("home").getPageCountSelect({
                 item: ["IN", parentids],
                 id: ["NOTIN", rejectarticles],
                 ispublished: 1
               }, pagenumber, pagesize);
 
-            case 84:
+            case 83:
               result = _context8.sent;
               Page = think.adapter("template", "page");
               page = new Page(this.http);
@@ -970,10 +968,10 @@ var _class = function (_Base) {
               cate = {};
 
               cate.category = category;
-              _context8.next = 94;
+              _context8.next = 93;
               return this.model("home").findOne("item", { id: category.parentid });
 
-            case 94:
+            case 93:
               ca = _context8.sent;
 
               if (!think.isEmpty(ca)) {
@@ -985,10 +983,10 @@ var _class = function (_Base) {
               this.assign('menu', urlrewrite + '-' + itemId);
               return _context8.abrupt('return', this.displayView('index_menu'));
 
-            case 103:
+            case 102:
               return _context8.abrupt('return', this.displayView("../common/error_404"));
 
-            case 104:
+            case 103:
             case 'end':
               return _context8.stop();
           }
@@ -1002,64 +1000,55 @@ var _class = function (_Base) {
 
     return menuAction;
   }();
+
   //文章页
 
 
   _class.prototype.pageAction = function () {
     var _ref13 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee9() {
-      var aurl, aid, aurlrewrite, curl, cid, curlrewrite, menuInfo, blogInfo, viewcount, tagItem, acc, html, strArray, particle, ainfo, pid, id, relatearticle, rejectarticles, i, itemList, title, strArrayVal, particleVal, cate, ca, source, setting, replyList, uinfo, loginuserinfo, collectList, tags, listtags, keywords, tag;
+      var aurl, arrU, aid, aurlrewrite, curl, arrC, cid, curlrewrite, menuInfo, blogInfo, acc, html, strArray, particle, ainfo, pid, id, relatearticle, rejectarticles, i, itemList, title, strArrayVal, particleVal, cate, ca, source, setting, replyList, uinfo, loginuserinfo, collectList, tags, listtags, keywords, tag;
       return _regenerator2.default.wrap(function _callee9$(_context9) {
         while (1) {
           switch (_context9.prev = _context9.next) {
             case 0:
               aurl = this.get("aurl");
-              aid = aurl.split('-')[aurl.split('-').length - 1];
-              aurlrewrite = aurl.replace("-" + aid, "");
+              arrU = aurl.split('-');
+              aid = arrU.splice(-1, 1);
+              aurlrewrite = arrU.join("-");
               curl = this.get("curl");
-              cid = curl.split('-')[curl.split('-').length - 1];
-              curlrewrite = curl.replace("-" + cid, "");
-              _context9.next = 8;
+              arrC = curl.split('-');
+              cid = arrC.splice(-1, 1);
+              curlrewrite = arrC.join("-");
+              _context9.next = 10;
               return this.model("home").findOne('item', { urlrewrite: curlrewrite, id: cid });
 
-            case 8:
+            case 10:
               menuInfo = _context9.sent;
 
-              console.log(menuInfo.itemname);
-
-              if (!menuInfo.itemname) {
-                _context9.next = 102;
+              if (think.isEmpty(menuInfo)) {
+                _context9.next = 97;
                 break;
               }
 
-              _context9.next = 13;
+              _context9.next = 14;
               return this.model("home").findOne('article', { urlrewrite: aurlrewrite, id: aid, item: cid });
 
-            case 13:
+            case 14:
               blogInfo = _context9.sent;
 
-              if (!(blogInfo.ispublished === 1)) {
-                _context9.next = 100;
+              if (think.isEmpty(blogInfo)) {
+                _context9.next = 95;
                 break;
               }
 
-              _context9.next = 17;
-              return this.model("home").addViewCount({ id: aid });
-
-            case 17:
-              viewcount = _context9.sent;
-              _context9.next = 20;
-              return this.model("home").findOne("item", { id: blogInfo.item });
-
-            case 20:
-              tagItem = _context9.sent;
-              _context9.next = 23;
+              _context9.next = 18;
               return this.model("home").findOne("user", { name: blogInfo.author });
 
-            case 23:
+            case 18:
               acc = _context9.sent;
 
               console.log(blogInfo.author);
-              this.assign('itemname', tagItem.itemname);
+              this.assign('itemname', menuInfo.itemname);
               this.assign('blogInfo', blogInfo);
               this.assign('acc', acc);
               //设置文章分页
@@ -1081,10 +1070,10 @@ var _class = function (_Base) {
                 }
               }
               //关联文章
-              _context9.next = 34;
+              _context9.next = 29;
               return this.model("home").getArticleList({ id: ['!=', aid], item: blogInfo.item, ispublished: 1 });
 
-            case 34:
+            case 29:
               relatearticle = _context9.sent;
 
               this.assign("relatearticle", relatearticle);
@@ -1095,10 +1084,10 @@ var _class = function (_Base) {
                 rejectarticles.push(relatearticle[i].id);
               }
               console.log("rejectarticles:" + rejectarticles.toString());
-              _context9.next = 41;
+              _context9.next = 36;
               return this.model("article").where({ id: ["NOTIN", rejectarticles], ispublished: 1 }).order("createtime DESC").limit(10).select();
 
-            case 41:
+            case 36:
               itemList = _context9.sent;
 
               this.assign("itemList", itemList);
@@ -1116,35 +1105,35 @@ var _class = function (_Base) {
               cate = {};
 
               cate.category = menuInfo;
-              _context9.next = 55;
+              _context9.next = 50;
               return this.model("home").findOne("item", { id: menuInfo.parentid });
 
-            case 55:
+            case 50:
               ca = _context9.sent;
 
               if (!think.isEmpty(ca)) {
                 cate.categoryparent = ca;
               }
-              _context9.next = 59;
+              _context9.next = 54;
               return this.model("home").findOne("source", { id: blogInfo.source });
 
-            case 59:
+            case 54:
               source = _context9.sent;
 
               this.assign('category', cate);
               this.assign('source', source);
-              _context9.next = 64;
+              _context9.next = 59;
               return this.model('home').findOne('system_comment');
 
-            case 64:
+            case 59:
               setting = _context9.sent;
 
               this.assign("setting", setting);
               //comment
-              _context9.next = 68;
+              _context9.next = 63;
               return this.model("home").getReplyListInfo({ tid: aid });
 
-            case 68:
+            case 63:
               replyList = _context9.sent;
 
               this.assign("replyList", replyList);
@@ -1156,29 +1145,29 @@ var _class = function (_Base) {
               //this.assign('topicItem',topicItem.comment);
 
               //account
-              _context9.next = 72;
+              _context9.next = 67;
               return this.session('uInfo');
 
-            case 72:
+            case 67:
               uinfo = _context9.sent;
 
               if (think.isEmpty(uinfo)) {
-                _context9.next = 82;
+                _context9.next = 77;
                 break;
               }
 
-              _context9.next = 76;
+              _context9.next = 71;
               return this.model('home').findOne('user', { name: uinfo.name });
 
-            case 76:
+            case 71:
               loginuserinfo = _context9.sent;
 
               this.assign("loginuserinfo", loginuserinfo);
               //collection
-              _context9.next = 80;
+              _context9.next = 75;
               return this.model('home').findAll('user_collect', { aid: aid, type: 'article', author: uinfo.name, iscollect: 1 });
 
-            case 80:
+            case 75:
               collectList = _context9.sent;
 
               if (collectList.length > 0) {
@@ -1189,43 +1178,43 @@ var _class = function (_Base) {
                 this.assign("iscollect", 0);
               }
 
-            case 82:
+            case 77:
               tags = blogInfo.keywords.split(",");
               listtags = { tags: [] };
               keywords = "";
 
               if (think.isEmpty(tags)) {
-                _context9.next = 97;
+                _context9.next = 92;
                 break;
               }
 
               i = 0;
 
-            case 87:
+            case 82:
               if (!(i < tags.length)) {
-                _context9.next = 96;
+                _context9.next = 91;
                 break;
               }
 
               if (think.isEmpty(tags[i])) {
-                _context9.next = 93;
+                _context9.next = 88;
                 break;
               }
 
-              _context9.next = 91;
+              _context9.next = 86;
               return this.model("home").findOne("tags", { id: tags[i] });
 
-            case 91:
+            case 86:
               tag = _context9.sent;
 
               listtags.tags.push({ tag: JSON.parse((0, _stringify2.default)(tag)) });
 
-            case 93:
+            case 88:
               i++;
-              _context9.next = 87;
+              _context9.next = 82;
               break;
 
-            case 96:
+            case 91:
 
               if (listtags.tags.length > 0) {
                 for (i = 0; i < listtags.tags.length; i++) {
@@ -1233,19 +1222,19 @@ var _class = function (_Base) {
                 }
               }
 
-            case 97:
+            case 92:
               this.assign("keywords", keywords);
               this.assign("listtags", listtags);
               return _context9.abrupt('return', this.displayView('index_page'));
 
-            case 100:
-              _context9.next = 103;
+            case 95:
+              _context9.next = 98;
               break;
 
-            case 102:
+            case 97:
               return _context9.abrupt('return', this.displayView("../common/error_404"));
 
-            case 103:
+            case 98:
             case 'end':
               return _context9.stop();
           }
@@ -1262,54 +1251,49 @@ var _class = function (_Base) {
 
   _class.prototype.previewAction = function () {
     var _ref14 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee10() {
-      var aurl, aid, aurlrewrite, curl, cid, curlrewrite, menuInfo, blogInfo, tagItem, acc, html, strArray, particle, ainfo, pid, id, relatearticle, rejectarticles, i, itemList, title, strArrayVal, particleVal, cate, ca, source, setting, replyList, uinfo, loginuserinfo, collectList, tags, listtags, keywords, tag;
+      var aurl, arrU, aid, aurlrewrite, curl, arrC, cid, curlrewrite, menuInfo, blogInfo, acc, html, strArray, particle, ainfo, pid, id, relatearticle, rejectarticles, i, itemList, title, strArrayVal, particleVal, cate, ca, source, setting, replyList, uinfo, loginuserinfo, collectList, tags, listtags, keywords, tag;
       return _regenerator2.default.wrap(function _callee10$(_context10) {
         while (1) {
           switch (_context10.prev = _context10.next) {
             case 0:
               aurl = this.get("aurl");
-              aid = aurl.split('-')[aurl.split('-').length - 1];
-              aurlrewrite = aurl.replace("-" + aid, "");
+              arrU = aurl.split('-');
+              aid = arrU.splice(-1, 1);
+              aurlrewrite = arrU.join("-");
               curl = this.get("curl");
-              cid = curl.split('-')[curl.split('-').length - 1];
-              curlrewrite = curl.replace("-" + cid, "");
-              _context10.next = 8;
+              arrC = curl.split('-');
+              cid = arrC.splice(-1, 1);
+              curlrewrite = arrC.join("-");
+              _context10.next = 10;
               return this.model("home").findOne('item', { urlrewrite: curlrewrite, id: cid });
 
-            case 8:
+            case 10:
               menuInfo = _context10.sent;
 
-              console.log(menuInfo.itemname);
-
-              if (!menuInfo.itemname) {
-                _context10.next = 99;
-                break;
-              }
-
-              _context10.next = 13;
-              return this.model("home").findOne('article', { urlrewrite: aurlrewrite, id: aid, item: cid });
-
-            case 13:
-              blogInfo = _context10.sent;
-
-              if (!(blogInfo.ispublished === 1)) {
+              if (think.isEmpty(menuInfo)) {
                 _context10.next = 97;
                 break;
               }
 
-              _context10.next = 17;
-              return this.model("home").findOne("item", { id: blogInfo.item });
+              _context10.next = 14;
+              return this.model("home").findOne('article', { urlrewrite: aurlrewrite, id: aid, item: cid });
 
-            case 17:
-              tagItem = _context10.sent;
-              _context10.next = 20;
+            case 14:
+              blogInfo = _context10.sent;
+
+              if (think.isEmpty(blogInfo)) {
+                _context10.next = 95;
+                break;
+              }
+
+              _context10.next = 18;
               return this.model("home").findOne("user", { name: blogInfo.author });
 
-            case 20:
+            case 18:
               acc = _context10.sent;
 
               console.log(blogInfo.author);
-              this.assign('itemname', tagItem.itemname);
+              this.assign('itemname', menuInfo.itemname);
               this.assign('blogInfo', blogInfo);
               this.assign('acc', acc);
               //设置文章分页
@@ -1331,10 +1315,10 @@ var _class = function (_Base) {
                 }
               }
               //关联文章
-              _context10.next = 31;
+              _context10.next = 29;
               return this.model("home").getArticleList({ id: ['!=', aid], item: blogInfo.item, ispublished: 1 });
 
-            case 31:
+            case 29:
               relatearticle = _context10.sent;
 
               this.assign("relatearticle", relatearticle);
@@ -1345,10 +1329,10 @@ var _class = function (_Base) {
                 rejectarticles.push(relatearticle[i].id);
               }
               console.log("rejectarticles:" + rejectarticles.toString());
-              _context10.next = 38;
+              _context10.next = 36;
               return this.model("article").where({ id: ["NOTIN", rejectarticles], ispublished: 1 }).order("createtime DESC").limit(10).select();
 
-            case 38:
+            case 36:
               itemList = _context10.sent;
 
               this.assign("itemList", itemList);
@@ -1366,35 +1350,35 @@ var _class = function (_Base) {
               cate = {};
 
               cate.category = menuInfo;
-              _context10.next = 52;
+              _context10.next = 50;
               return this.model("home").findOne("item", { id: menuInfo.parentid });
 
-            case 52:
+            case 50:
               ca = _context10.sent;
 
               if (!think.isEmpty(ca)) {
                 cate.categoryparent = ca;
               }
-              _context10.next = 56;
+              _context10.next = 54;
               return this.model("home").findOne("source", { id: blogInfo.source });
 
-            case 56:
+            case 54:
               source = _context10.sent;
 
               this.assign('category', cate);
               this.assign('source', source);
-              _context10.next = 61;
+              _context10.next = 59;
               return this.model('home').findOne('system_comment');
 
-            case 61:
+            case 59:
               setting = _context10.sent;
 
               this.assign("setting", setting);
               //comment
-              _context10.next = 65;
+              _context10.next = 63;
               return this.model("home").getReplyListInfo({ tid: aid });
 
-            case 65:
+            case 63:
               replyList = _context10.sent;
 
               this.assign("replyList", replyList);
@@ -1406,29 +1390,29 @@ var _class = function (_Base) {
               //this.assign('topicItem',topicItem.comment);
 
               //account
-              _context10.next = 69;
+              _context10.next = 67;
               return this.session('uInfo');
 
-            case 69:
+            case 67:
               uinfo = _context10.sent;
 
               if (think.isEmpty(uinfo)) {
-                _context10.next = 79;
+                _context10.next = 77;
                 break;
               }
 
-              _context10.next = 73;
+              _context10.next = 71;
               return this.model('home').findOne('user', { name: uinfo.name });
 
-            case 73:
+            case 71:
               loginuserinfo = _context10.sent;
 
               this.assign("loginuserinfo", loginuserinfo);
               //collection
-              _context10.next = 77;
+              _context10.next = 75;
               return this.model('home').findAll('user_collect', { aid: aid, type: 'article', author: uinfo.name, iscollect: 1 });
 
-            case 77:
+            case 75:
               collectList = _context10.sent;
 
               if (collectList.length > 0) {
@@ -1439,43 +1423,43 @@ var _class = function (_Base) {
                 this.assign("iscollect", 0);
               }
 
-            case 79:
+            case 77:
               tags = blogInfo.keywords.split(",");
               listtags = { tags: [] };
               keywords = "";
 
               if (think.isEmpty(tags)) {
-                _context10.next = 94;
+                _context10.next = 92;
                 break;
               }
 
               i = 0;
 
-            case 84:
+            case 82:
               if (!(i < tags.length)) {
-                _context10.next = 93;
+                _context10.next = 91;
                 break;
               }
 
               if (think.isEmpty(tags[i])) {
-                _context10.next = 90;
+                _context10.next = 88;
                 break;
               }
 
-              _context10.next = 88;
+              _context10.next = 86;
               return this.model("home").findOne("tags", { id: tags[i] });
 
-            case 88:
+            case 86:
               tag = _context10.sent;
 
               listtags.tags.push({ tag: JSON.parse((0, _stringify2.default)(tag)) });
 
-            case 90:
+            case 88:
               i++;
-              _context10.next = 84;
+              _context10.next = 82;
               break;
 
-            case 93:
+            case 91:
 
               if (listtags.tags.length > 0) {
                 for (i = 0; i < listtags.tags.length; i++) {
@@ -1483,19 +1467,19 @@ var _class = function (_Base) {
                 }
               }
 
-            case 94:
+            case 92:
               this.assign("keywords", keywords);
               this.assign("listtags", listtags);
               return _context10.abrupt('return', this.displayView('index_preview'));
 
-            case 97:
-              _context10.next = 100;
+            case 95:
+              _context10.next = 98;
               break;
 
-            case 99:
+            case 97:
               return _context10.abrupt('return', this.displayView("../common/error_404"));
 
-            case 100:
+            case 98:
             case 'end':
               return _context10.stop();
           }
@@ -1798,49 +1782,44 @@ var _class = function (_Base) {
 
   _class.prototype.categoryAction = function () {
     var _ref23 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee19() {
-      var b, pagenumber, pagesize, aurl, itemId, urlrewrite, category, itemList, result, Page, page, pageData;
+      var pagenumber, pagesize, aurl, arrU, itemId, urlrewrite, category, itemList, result, Page, page, pageData;
       return _regenerator2.default.wrap(function _callee19$(_context19) {
         while (1) {
           switch (_context19.prev = _context19.next) {
             case 0:
-              b = this.get("page");
-
-              console.log(b);
               pagenumber = this.get("page") || 1;
               pagesize = this.get("pagesize") || 10;
-              _context19.next = 6;
+              _context19.next = 4;
               return this.get("aurl");
 
-            case 6:
+            case 4:
               aurl = _context19.sent;
-              itemId = aurl.split('-')[aurl.split('-').length - 1];
-              urlrewrite = aurl.replace("-" + itemId, "");
-
-              console.log(itemId);
-              console.log(urlrewrite);
-              _context19.next = 13;
+              arrU = aurl.split('-');
+              itemId = arrU.splice(-1, 1);
+              urlrewrite = arrU.join("-");
+              _context19.next = 10;
               return this.model("home").findOne("tags", { urlrewrite: urlrewrite, id: itemId });
 
-            case 13:
+            case 10:
               category = _context19.sent;
 
               if (!category.tagname) {
-                _context19.next = 33;
+                _context19.next = 30;
                 break;
               }
 
-              _context19.next = 17;
+              _context19.next = 14;
               return this.model("home").getPageSelect({ keywords: ["like", "%," + itemId.toString() + ",%"], ispublished: 1 }, pagenumber, pagesize);
 
-            case 17:
+            case 14:
               itemList = _context19.sent;
-              _context19.next = 20;
+              _context19.next = 17;
               return this.model("home").getPageCountSelect({
                 keywords: ["like", "%," + itemId.toString() + ",%"],
                 ispublished: 1
               }, pagenumber, pagesize);
 
-            case 20:
+            case 17:
               result = _context19.sent;
               Page = think.adapter("template", "page");
               page = new Page(this.http);
@@ -1855,10 +1834,10 @@ var _class = function (_Base) {
               this.assign('menu', 'tag/' + urlrewrite + '-' + itemId);
               return _context19.abrupt('return', this.displayView('index_category'));
 
-            case 33:
+            case 30:
               return _context19.abrupt('return', this.displayView("../common/error_404"));
 
-            case 34:
+            case 31:
             case 'end':
               return _context19.stop();
           }
