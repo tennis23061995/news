@@ -13,6 +13,7 @@
           <div class="focusmo">
             <ul>
               {% article data = "largetopList",limit= "1",flag="flag_a"%}
+              {% set comma = "" %}
               {% for item in largetopList %}
                 {% set curlrewrite = "category" %}
                 {% for menu in navList.menu %}
@@ -20,6 +21,10 @@
                     {% set curlrewrite = menu.parentmenu.urlrewrite %}
                 {% endif %}
                 {%endfor%}
+
+
+                {% set comma=comma+item.id+"," %}
+
               <li class="large">
                 <span>
                   <a href="/{{item.itemurlrewrite}}-{{item.item}}/{{item.urlrewrite}}-{{item.id}}">
@@ -31,6 +36,7 @@
               </li>
               {%endfor%}
               {% article data = "topList",limit= "4",flag="totop"%}
+              {% set i = 0 %}
               {% for item in topList %}
                 <li>
                   <span>
@@ -41,6 +47,12 @@
                     </a>
                   </span>
                 </li>
+                {% set i=i+1 %}
+                 {% if i!=topList.length %}
+                {% set comma=comma+item.id+"," %}
+                {% else %}
+                {% set comma=comma+item.id %}
+                {% endif %}
               {% endfor %}
             </ul>
           </div>
@@ -64,97 +76,71 @@
     </section>
 {% endblock %}
 {% block content %}
-  {% for menu in navList.menu %}
-  <div class="topnews">
-
-    <div class="h2" id="menu-{{menu.parentmenu.id}}">
-      <!-- {% if menu.submenus.length>0 %}
-      <div class="navbar-header pull-right">
-                      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-{{menu.parentmenu.id}}">
-                          <i class="fa fa-bars" aria-hidden="true"></i>
-                      </button>
-
-                  </div>
-                  {% endif %} -->
-     <span>
-       <a href="/{{menu.parentmenu.urlrewrite}}-{{menu.parentmenu.id}}">Tất Cả>></a>
-     </span>
-     <a href="#" class="submenuclick" data-parentid={{menu.parentmenu.id}} data-id={{menu.parentmenu.id}}>{{menu.parentmenu.itemname}}</a>
-       {% if menu.submenus.length>0 %}
-     <div class="collapse navbar-collapse pull-right" id="navbar-collapse-{{menu.parentmenu.id}}">
-                     <ul class="nav navbar-nav">
-                       {% for submenu in menu.submenus %}
-                         <li><a href="#" class="submenuclick" data-parentid={{submenu.parentid}} data-id={{submenu.id}}>{{submenu.itemname}}</a></li>
-                  {% endfor %}
-                     </ul>
-                 </div>
-                   {% endif %}
-    </div>
-
-    <div class="row" id="menunews-{{menu.parentmenu.id}}">
-      {% if menu.parentmenu.style==1 %}
-  {% article data = "topList",limit= "2",cid=menu.submenusid,iscategory=true %}
-
-     {% set comma = "" %}
-     {% if topList.length>0 %}
-     {% set i = 0 %}
-     {% for im in topList %}
-     {% set i=i+1 %}
-      {% if i!=topList.length %}
-    {% set comma=comma+im.id+"," %}
-    {% else %}
-    {% set comma=comma+im.id %}
-    {% endif %}
-       {% endfor %}
-     {% endif %}
-     {% article data = "newsList",limit= "6",rejectnews=comma,cid=menu.submenusid,iscategory=true %}
-   {% include "./inc/index_style1.html" %}
-{% elif menu.parentmenu.style==2 %}
-{% article data = "topList",limit= "2",cid=menu.submenusid,iscategory=true %}
-{% set comma = "" %}
-{% if topList.length>0 %}
+<div class="topnews">
+			<div class="h2">
+				Tin Mới
+			</div>
+{% article data = "itemList",limit= "10",rejectnews=comma %}
 {% set i = 0 %}
-{% for im in topList %}
-{% set i=i+1 %}
- {% if i!=topList.length %}
-{% set comma=comma+im.id+"," %}
-{% else %}
-{% set comma=comma+im.id %}
-{% endif %}
-  {% endfor %}
-{% endif %}
- {% article data = "newsList",rejectnews=comma,limit= "3",cid=menu.submenusid,iscategory=true %}
- {% if newsList.length>0 %}
- {% set comma = comma+"," %}
- {% set i = 0 %}
- {% for im in newsList %}
- {% set i=i+1 %}
-  {% if i!=newsList.length %}
- {% set comma=comma+im.id+"," %}
- {% else %}
- {% set comma=comma+im.id %}
- {% endif %}
-   {% endfor %}
- {% endif %}
-  {% article data = "newsList1",rejectnews=comma,limit= "3",cid=menu.submenusid,iscategory=true %}
-
-  {% include "./inc/index_style2.html" %}
-  {% elif menu.parentmenu.style==3 %}
-  {% article data = "topList",limit= "6",cid=menu.submenusid,iscategory=true %}
-    {% include "./inc/index_style3.html" %}
-{% endif %}
-
-
-	</div>
-
-  </div>
-  {%endfor%}
+{% set comma=comma+"," %}
+			{% if itemList.length>0 %}
+				{% for item in itemList %}
+				<div class="blogs">
+					 <figure>
+						 <a href="/{{item.itemurlrewrite}}-{{item.item}}/{{item.urlrewrite}}-{{item.id}}"><img src="{{_web.url}}{{'static/common/images/common/default.jpg' if item.picurl=='' else item.picurl }}" title="{{item.title}}"></a>
+						</figure>
+						<ul class="articleul">
+						<h3> <a href="/{{item.itemurlrewrite}}-{{item.item}}/{{item.urlrewrite}}-{{item.id}}">{{item.title}}</a></h3>
+						 <p class="abstract">{{item.abstract}}</p>
+						 <p class="by-author">
+							 <span><a style="color: #3498db;" href="/{{item.itemurlrewrite}}-{{item.item}}">{{item.itemname}}</a></span>
+							 <span><i class="glyphicon glyphicon-eye-open"></i> {{item.view}}</span>
+						 </p>
+						</ul>
+					</div>
+          {% set i=i+1 %}
+           {% if i!=itemList.length %}
+          {% set comma=comma+item.id+"," %}
+          {% else %}
+          {% set comma=comma+item.id %}
+          {% endif %}
+				{%endfor%}
+			{%endif%}
+		</div>
+    <div data-reject="{{comma}}" class="btn-loadmore" style="text-align:center;margin-top:10px"><button class="btn btn-default">Xem Thêm</button></div>
 
 {% endblock %}
 
-<!-- {% block footer_other %}
-<script id="cy_cmt_num" src="//changyan.sohu.com/upload/plugins/plugins.list.count.js?clientId=cysoRJNxO"></script>
+{% block footer_other %}
 <script>
-
+var result=true;
+$("body").on("click",".btn-loadmore", function (e) {
+  var newData={
+      reject:$(".btn-loadmore").attr("data-reject"),
+      __CSRF__:G_csrf
+  }
+  if(result)
+  {
+  $.post("/home/index/getarticle",newData, function (data) {
+    result=false;
+    if(data.errno==0)
+    {
+    var lstarticle=data.data.articles;
+    var adata=$(".btn-loadmore").attr("data-reject");
+    if(lstarticle.length>0){
+    for (var i = 0; i < lstarticle.length; i++) {
+      adata=adata+",";
+      var content=
+'<div class="blogs"><figure><a href="/'+lstarticle[i].itemurlrewrite+'-'+lstarticle[i].item+'/'+lstarticle[i].urlrewrite+'-'+lstarticle[i].id+'"><img src="'+lstarticle[i].picurl+'" title="'+lstarticle[i].title+'"></a></figure><ul class="articleul"><h3> <a href="/'+lstarticle[i].itemurlrewrite+'-'+lstarticle[i].item+'/'+lstarticle[i].urlrewrite+'-'+lstarticle[i].id+'">'+lstarticle[i].title+'</a></h3><p class="abstract">'+lstarticle[i].abstract+'</p><p class="by-author"><span><a style="color: #3498db;" href="/'+lstarticle[i].itemurlrewrite+'-'+lstarticle[i].item+'">'+lstarticle[i].itemname+'</a></span><span><i class="glyphicon glyphicon-eye-open"></i> '+lstarticle[i].view+'</span></p></ul></div>';
+      $(".topnews").append(content);
+      adata+=lstarticle[i].id;
+    }
+    $(".btn-loadmore").attr("data-reject",adata);
+    result=true;
+  }
+  }
+  });
+}
+});
 </script>
-{% endblock %} -->
+{% endblock %}
