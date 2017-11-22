@@ -391,7 +391,7 @@ var _class = function (_Base) {
               content = "";
 
               if (think.isEmpty(items)) {
-                _context4.next = 40;
+                _context4.next = 41;
                 break;
               }
 
@@ -411,7 +411,7 @@ var _class = function (_Base) {
                 break;
               }
 
-              return _context4.abrupt('break', 38);
+              return _context4.abrupt('break', 39);
 
             case 17:
               _ref8 = _iterator4[_i4++];
@@ -426,7 +426,7 @@ var _class = function (_Base) {
                 break;
               }
 
-              return _context4.abrupt('break', 38);
+              return _context4.abrupt('break', 39);
 
             case 23:
               _ref8 = _i4.value;
@@ -463,12 +463,13 @@ var _class = function (_Base) {
               obj = { url: url, img: imgs, lastmodISO: lastM, changefreq: 'weekly', priority: 0.8 };
 
               urls.push(obj);
+              imgs = [];
 
-            case 36:
+            case 37:
               _context4.next = 14;
               break;
 
-            case 38:
+            case 39:
               sm = require('sitemap');
 
               content = sm.createSitemap({
@@ -477,11 +478,11 @@ var _class = function (_Base) {
                 urls: urls
               }).toString();
 
-            case 40:
+            case 41:
               this.header('Content-Type', 'application/xml');
               this.end(content);
 
-            case 42:
+            case 43:
             case 'end':
               return _context4.stop();
           }
