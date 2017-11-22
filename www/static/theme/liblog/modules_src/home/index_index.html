@@ -107,7 +107,7 @@
 				{%endfor%}
 			{%endif%}
 		</div>
-    <div data-reject="{{comma}}" class="btn-loadmore" style="text-align:center;margin-top:10px"><button class="btn btn-default">Xem Thêm</button></div>
+    <div data-reject="{{comma}}" class="btn-loadmore" style="text-align:center;margin-top:10px"><a href="#" style="font-size:20px;color:#3498db;font-weight:bold">Xem Thêm</a></div>
 
 {% endblock %}
 
@@ -115,6 +115,7 @@
 <script>
 var result=true;
 $("body").on("click",".btn-loadmore", function (e) {
+  e.preventDefault();
   var newData={
       reject:$(".btn-loadmore").attr("data-reject"),
       __CSRF__:G_csrf
@@ -137,6 +138,8 @@ $("body").on("click",".btn-loadmore", function (e) {
     }
     $(".btn-loadmore").attr("data-reject",adata);
     result=true;
+  }else {
+    $(".btn-loadmore").html("Không còn bài viết nào nữa")
   }
   }
   });

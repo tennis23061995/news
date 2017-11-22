@@ -592,7 +592,7 @@ var _class = function (_Base) {
 
             case 20:
               _context6.next = 22;
-              return this.model("article").where({ id: ["NOTIN", areject] }).order("createtime DESC").limit(10).select();
+              return this.model("article").where({ id: ["NOTIN", areject], ispublished: 1 }).order("createtime DESC").limit(10).select();
 
             case 22:
               articles = _context6.sent;
