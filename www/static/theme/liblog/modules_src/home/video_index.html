@@ -4,6 +4,7 @@
     <meta name="keywords" content="xu hướng, youtube, trends, thịnh hành, media, videos">
     <meta name="description" content="Video công nghệ giới thiệu với bạn những gì trực quan nhất để giúp bạn có thể tiếp cận với những sản phẩm mới, video đánh giá sản phẩm chi tiết, thú vị...">
     {{ super() }}
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <style>
     #search-video
 {
@@ -19,6 +20,9 @@
 
 .video-list-thumbs > li{
     margin-bottom:12px;
+}
+.dropdown-menu ul li{
+  list-style: none;
 }
 .video-list-thumbs > li:last-child{}
 .video-list-thumbs > li > a{
@@ -98,7 +102,20 @@
 {
   padding: 0px 12px;
 }
-
+body{
+  font-family: "Open Sans", sans-serif;
+}
+footer,
+.container {
+  max-width: 70em; margin: 0 auto;
+  padding: 0;
+}
+footer{
+  padding: 20px 0;
+}
+.search-block input{
+  height: 36px;
+}
     </style>
     <!-- <link href="{{_web.url}}{{theme_url}}/{{think.Dev_Src}}css/business/index/index_topic.css" rel="stylesheet"> -->
 {% endblock %}
@@ -159,7 +176,7 @@
          <ul class="list-unstyled video-list-thumbs" id="search-listitem">
          </ul>
          <div class="clearfix"></div>
-           <div class="loading-info" style="display:none;text-align:center">
+           <div class="loading-info" style="display:none;text-align:center;margin-bottom:10px;">
                <img src="/Images/loading.gif" />
            </div>
            <!-- <ul class="list-unstyled video-list-thumbs">
@@ -226,105 +243,9 @@
 </div>
 {% endblock %}
 {% block footer_other %}
-<script id="cy_cmt_num" src="//changyan.sohu.com/upload/plugins/plugins.list.count.js?clientId=cysoRJNxO"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 <script>
-
-        $('body').on('click','.btn-video-detail',function (e) {
-            e.preventDefault();
-            window.location.href="/video?category="+$(this).attr("data-id");
-        });
-
-    var stopajax = true;
-    var track_page = 1; //track user scroll as page number, right now page number is 1
-    var loading = false;
-    function load_contents(track_page) {
-        stopajax=false;
-        var data = {};
-        data['page'] = track_page;
-        data['keyword'] = $("#search-video input[name=keyword]").val();
-        data['category'] = $("#search-video input[name=category]").val();
-          data['__CSRF__']=G_csrf;
-        console.log(data);
-        //  alert(language);
-        //alert(effectStatus);
-        if (loading == false) {
-            loading = true;  //set loading flag on
-            $('.loading-info').show(); //show loading animation
-            $.post('/home/video/getdatavideo', data, function (data) {
-                console.log(data);
-                //window.scrollTo(0, $("#search-listitem").offset().top);
-                loading = false; //set loading flag off once the content is loaded
-                $("#item-count").html("(" + data.total + " kết quả)");
-
-                    if (data.data.total == 0) {
-                        //notify user if nothing to load
-                        $('.loading-info').html("Không còn video nữa!");
-                        stopajax = false;
-                        return;
-                    }
-                    else {
-                        var content = "";
-                        for(var i=0;i<data.data.content.length;i++)
-                        {
-                          if(data.data.content[i].picurl=="")
-                          {
-                              content += '<li class="col-lg-3 col-sm-4 col-xs-6"><a data-id="'+data.data.content[i].id+'" class="btn-video" href="#" title="'+data.data.content[i].title+'"><img src="http://i.ytimg.com/vi/ZKOtE9DOwGE/mqdefault.jpg" alt="'+data.data.content[i].title+'" class="img-responsive" height="130px" /><h2>'+data.data.content[i].title+'</h2><span class="glyphicon glyphicon-play-circle"></span> <span class="duration">'+data.data.content[i].itemname+'</span></a></li>';
-                          }
-                          else {
-                            content += '<li class="col-lg-3 col-sm-4 col-xs-6"><a data-id="'+data.data.content[i].id+'" class="btn-video" href="#" title="'+data.data.content[i].title+'"><img src="/'+data.data.content[i].picurl+'" alt="'+data.data.content[i].title+'" class="img-responsive" height="130px" /><h2>'+data.data.content[i].title+'</h2><span class="glyphicon glyphicon-play-circle"></span> <span class="duration">'+data.data.content[i].itemname+'</span></a></li>';
-                          }
-                        }
-                        $('.loading-info').hide(); //hide loading animation once data is received
-                        $("#search-listitem").append(content); //append data into #results element
-                    }
-                    stopajax = true;
-
-
-            }).fail(function (xhr, ajaxOptions, thrownError) { //any errors?
-                alert(thrownError); //alert with HTTP error
-            })
-        }
-    }
-    load_contents(track_page)
-    $(window).scroll(function () { //detect page scroll
-        if ($(window).scrollTop() + $(window).height() > $(document).height() - 100 && stopajax == true) { //if user scrolled to bottom of the page
-            track_page++; //page number increment
-            load_contents(track_page); //load content
-        }
-    });
-    $("body").on("click",".btn-video", function (e) {
-      $("#myVideo .modal-header .category").html("");
-      $("#myVideo .modal-body").html("");
-      $("#myVideo .modal-header .from").html("");
-      $("#myVideo .modal-title").html("");
-      e.preventDefault();
-      var newData={
-          id:$(this).attr("data-id"),
-          __CSRF__:G_csrf
-      }
-           $.post("/home/index/getvideo",newData, function (data) {
-             var height="";
-             if(window.innerWidth <=1024)height=($(window).height()/2).toString()+"px";
-             else height=($(window).height()-150).toString()+"px";
-             var content='';
-              if(data.data.content.linkvideo.indexOf("youtube.com")!= -1) content='<iframe width="100%" height="'+height+'" src="' + data.data.content.linkvideo + '"></iframe>';
-              else content = '<video width="100%"  controls><source src="' + data.data.content.linkvideo + '" type="video/mp4"><source src="mov_bbb.ogg" type="video/ogg">Your browser does not support HTML5 video.</video>';
-               $("#myVideo .modal-body").html(content);
-               if(data.data.content.from!="")$("#myVideo .modal-header .from").html(" | Nguồn: "+data.data.content.from);
-               $("#myVideo .modal-header .category").html('<a class="btn-video-detail" data-id="'+data.data.content.item+'">'+data.data.content.itemname+'</a>');
-               $("#myVideo .modal-title").html(data.data.content.title);
-               $('#myVideo').modal('show');
-           })
-       })
-       $('#myVideo').on('shown.bs.modal', function () {
-         $("#myVideo .modal-dialog").css("margin-top","0");
-               var top = ($(window).height() / 2) - ($("#myVideo .modal-content").height() / 2);
-               if (top >= 0) $("#myVideo .modal-content").css("top", top + "px");
-           });
-           $(".search-panel").on("click",".btn",function(){
-             $(".search-panel .dropdown-menu").toggle();
-           });
+urls.unshift("{{_web.url}}{{theme_url}}/{{think.Dev_Src}}js/business/video/video.js");
+urls.unshift("https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js");
 </script>
 
 {% endblock %}

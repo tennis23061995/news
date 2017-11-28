@@ -7,60 +7,87 @@
 {% endblock %}
 
 {% block content %}
-		<div class="topnews">
-			<div class="h2">
+<style>
+.breadcrumb {
+    list-style: none;
+    padding: 9px 5px;
+    font-size: 14px;
+    border-bottom: 1px solid rgb(234, 234, 234);
+    margin: 0;
+  }
+  .breadcrumb a{
+    text-decoration: none;
+    color: #3498db;
+    font-weight: bold;
+  }
+.breadcrumb>li {
+    display: inline-block;
+}
+.breadcrumb>li+li:before
+{
+  content: "/\00a0";
+  padding: 0 5px;
+}
+.dataTables_wrapper{
+	text-align: right;
+	padding: 10px 10px 20px 0;
+	border-top: 1px solid rgb(234, 234, 234);
+}
+.dataTables_wrapper span ,.dataTables_wrapper a{
+	margin-right: 3px;
+}
+.current{
+	color: red;
+}
+</style>
+		<div class="block">
 				 <ol class="breadcrumb">
 						 <li><a href="{{_web.url}}"><i class="fa fa-home"></i></a></li>
 						 <li class="active">Tìm Kiếm</li>
 				 </ol>
-			</div>
 			{% if itemList.length>0 %}
 				{% for item in itemList %}
-				<div class="blogs">
-					 <figure>
-						 <a href="/{{item.itemurlrewrite}}-{{item.item}}/{{item.urlrewrite}}-{{item.id}}"><img src="{{_web.url}}{{'static/common/images/common/default.jpg' if item.picurl=='' else item.picurl }}" title="{{item.title}}"></a>
-						</figure>
-						<ul class="articleul">
-						<h3> <a href="/{{item.itemurlrewrite}}-{{item.item}}/{{item.urlrewrite}}-{{item.id}}">{{item.title}}</a></h3>
-						 <p class="abstract">{{item.abstract}}</p>
-						 <p class="by-author">
-							 <span><a style="color: #3498db;" href="/{{item.itemurlrewrite}}-{{item.item}}">{{item.itemname}}</a></span>
-							 <span><i class="glyphicon glyphicon-eye-open"></i> {{item.view}}</span>
-						 </p>
-						</ul>
-					</div>
+				<div class="item"> <!-- using data uri for images -->
+				  <div class="item-left">
+				    <a href="/{{item.itemurlrewrite}}-{{item.item}}/{{item.urlrewrite}}-{{item.id}}"><img src="{{_web.url}}{{'static/common/images/common/default.jpg' if item.picurl=='' else item.picurl }}" title="{{item.title}}"></a>
+				  </div>
+				  <div class="item-right">
+				   <p class="title"><a href="/{{item.itemurlrewrite}}-{{item.item}}/{{item.urlrewrite}}-{{item.id}}">{{item.title}}</a></p>
+				  <p class="summary">{{item.abstract}}</p>
+				  <p class="category">
+				    <a style="color: #3498db;" href="/{{item.itemurlrewrite}}-{{item.item}}">{{item.itemname}}</a>
+				    <span class="time"><i class="fa fa-clock-o" aria-hidden="true"></i> <time class="timeago" datetime="{{think.datetime(item.createtime)}}"></time></span>
+				  </p>
+				</div>
+				<div class="clearfix"></div>
+				</div>
 				{%endfor%}
 			{%else%}
-			<div class="nocontent">
+			<div style="text-align:center;">
 				Rất tiếc, không có kết quả nào khớp với từ khóa tìm kiếm của bạn.
 			</div>
-			<div class="topnews">
-				<div class="h2">
+				<div style="font-size:16px; font-weight:bold">
 					Bạn có thể quan tâm
 				</div>
 				{% for item in torecomList %}
-				<div class="blogs">
-					 <figure>
-						 <a href="/{{item.itemurlrewrite}}-{{item.item}}/{{item.urlrewrite}}-{{item.id}}"><img src="{{_web.url}}{{'static/common/images/common/default.jpg' if item.picurl=='' else item.picurl }}" title="{{item.title}}"></a>
-						</figure>
-						<ul class="articleul">
-						<h3> <a href="/{{item.itemurlrewrite}}-{{item.item}}/{{item.urlrewrite}}-{{item.id}}">{{item.title}}</a></h3>
-						 <p class="abstract">{{item.abstract}}</p>
-						 <p class="by-author">
-							 <span><a style="color: #3498db;" href="/{{item.itemurlrewrite}}-{{item.item}}">{{item.itemname}}</a></span>
-							 <span><i class="glyphicon glyphicon-eye-open"></i> {{item.view}}</span>
-						 </p>
-						</ul>
-					</div>
+				<div class="item"> <!-- using data uri for images -->
+				  <div class="item-left">
+				    <a href="/{{item.itemurlrewrite}}-{{item.item}}/{{item.urlrewrite}}-{{item.id}}"><img src="{{_web.url}}{{'static/common/images/common/default.jpg' if item.picurl=='' else item.picurl }}" title="{{item.title}}"></a>
+				  </div>
+				  <div class="item-right">
+				   <p class="title"><a href="/{{item.itemurlrewrite}}-{{item.item}}/{{item.urlrewrite}}-{{item.id}}">{{item.title}}</a></p>
+				  <p class="summary">{{item.abstract}}</p>
+				  <p class="category">
+				    <a style="color: #3498db;" href="/{{item.itemurlrewrite}}-{{item.item}}">{{item.itemname}}</a>
+				    <span class="time"><i class="fa fa-clock-o" aria-hidden="true"></i> <time class="timeago" datetime="{{think.datetime(item.createtime)}}"></time></span>
+				  </p>
+				</div>
+				<div class="clearfix"></div>
+				</div>
 				{%endfor%}
-			</div>
 			{%endif%}
 		</div>
 		{%if pageData.count>10 %}
 			 {% include "../common/inc/pagination_search.html" %}
 		{%endif%}
-{% endblock %}
-
-{% block footer_other %}
-<script id="cy_cmt_num" src="//changyan.sohu.com/upload/plugins/plugins.list.count.js?clientId=cysoRJNxO"></script>
 {% endblock %}
