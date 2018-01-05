@@ -147,9 +147,7 @@
 <div class="fb-like" data-href="/{{blogInfo.itemurlrewrite}}-{{blogInfo.item}}/{{blogInfo.urlrewrite}}-{{blogInfo.id}}.html" data-layout="button_count" data-action="like" data-size="large" data-show-faces="true" data-share="true"></div>
 
                 </header>
-                {%if particle.length>0 %}
-                {{particle}}
-                {%else%}
+
                 {%if relatearticle.length!=0 %}
                           {% for item in relatearticle %}
                           <div class="item"><a href="/{{item.itemurlrewrite}}-{{item.item}}/{{item.urlrewrite}}-{{item.id}}" title="{{item.title}}">
@@ -162,7 +160,6 @@
         <div id="showContent">
             <h4>{{blogInfo.abstract}}</h4>
             <div class="content-article">{{blogInfo.content|safe}}</div>
-            {%endif%}
             {%if blogInfo.from!="" or (source.id!=null and source.id!=0) %}
             <div class="from">
                 Nguồn: {{blogInfo.from}} {%if source.id!=null and source.id!=0 %}{%if blogInfo.from!="" %} - {%endif%}<a href="{{source.url}}">{{source.name}}</a>{%endif%}
